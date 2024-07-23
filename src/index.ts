@@ -1,22 +1,16 @@
 import express, { Request, Response } from "express";
-import mysql from "mysql2/promise";
+import database from "./infra/database.js";
+import routes from "./routes.js";
 
 const server = express();
-const PORT = 3001;
+server.use(express.json());
+server.use(routes);
 
-const pool = mysql.createPool({
-  host: "localhost",
-  user: "root",
-  password: "local_password",
-  database: "local_database",
-  waitForConnections: true,
-  connectionLimit: 10,
-  queueLimit: 0,
-});
+const PORT = 3001;
 
 server.get("/status", async (req: Request, res: Response) => {
   try {
-    const connection = await pool.getConnection();
+    const connection = await database.getConnection();
     res.status(200).json({
       message: "Servidor Funcionando.",
     });
