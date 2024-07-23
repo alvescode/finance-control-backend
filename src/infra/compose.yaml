@@ -1,0 +1,10 @@
+services:
+  database:
+    image: mysql:9.0.0
+    environment:
+      MYSQL_ROOT_PASSWORD: local_password
+      MYSQL_DATABASE: local_database
+      MYSQL_USER: user
+      MYSQL_PASSWORD: local_password
+    ports:
+      - "3306:3306"
