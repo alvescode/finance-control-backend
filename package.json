@@ -13,28 +13,33 @@
     "services:up": "sudo docker compose -f ./src/infra/compose.yaml up -d",
     "services:down": "sudo docker compose -f ./src/infra/compose.yaml down",
     "services:stop": "sudo docker compose -f ./src/infra/compose.yaml stop",
-    "dev": "npm run services:up && npm run build && npm run start"
+    "dev": "npm run services:up && npm run build && npm run start",
+    "typeorm": "ts-node-dev ./node_modules/typeorm/cli.js",
+    "migration:run": "npx ts-node-dev ./node_modules/typeorm/cli.js migration:run -d dist/database/data-source.js"
   },
   "author": "alvescode",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@types/node": "^20.14.11",
     "bcrypt": "^5.1.1",
     "express": "^4.19.2",
+    "express-async-errors": "^3.1.1",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.10.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "reflect-metadata": "^0.2.2",
-    "ts-node": "^10.9.2",
     "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
     "@types/jest": "^29.5.12",
-    "@types/node": "^20.14.11",
     "jest": "^29.7.0",
     "prettier": "^3.3.3",
+    "ts-node": "^10.9.2",
+    "ts-node-dev": "^2.0.0",
+    "tsconfig-paths": "^4.2.0",
     "typescript": "^5.5.3"
   }
 }
