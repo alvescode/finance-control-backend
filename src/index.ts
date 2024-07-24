@@ -1,12 +1,13 @@
-import express, { Request, Response } from "express";
+import express from "express";
 import "reflect-metadata";
 import { AppDataSource } from "./database/data-source.js";
-import { userRepository } from "./app/repositories/UserRepository.js";
 import routers from "./app/routes/routes.js";
+import cors from "cors";
 
 const server = express();
 server.use(express.json());
 server.use(routers);
+server.use(cors());
 const PORT = 3001;
 
 AppDataSource.initialize()

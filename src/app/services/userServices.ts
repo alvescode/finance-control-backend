@@ -5,6 +5,8 @@ import IUser from "../interfaces/IUser.js";
 import jwt from "jsonwebtoken";
 
 const register = async (req: Request, res: Response) => {
+  console.log("recebendo requisição...");
+
   const { name, email, password }: IUser = req.body;
 
   try {
@@ -23,8 +25,8 @@ const register = async (req: Request, res: Response) => {
 };
 
 const login = async (req: Request, res: Response) => {
+  console.log("recebendo requisição...");
   const { email, password }: { email: string; password: string } = req.body;
-
   try {
     const user = await userRepository.findOneBy({ email });
 
