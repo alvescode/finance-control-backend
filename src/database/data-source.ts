@@ -1,6 +1,6 @@
 import { DataSource } from "typeorm";
 import "reflect-metadata";
-// import { User } from "../entity/User.entity.js";
+import User from "../app/entities/User.js";
 import { CreateUsersTable1721751102172 } from "./migrations/1721751102172-CreateUsersTable.js";
 
 export const AppDataSource = new DataSource({
@@ -12,7 +12,7 @@ export const AppDataSource = new DataSource({
   database: "local_database",
   synchronize: true,
   // logging  : true,
-  entities: [], //User //"src/entity/**/*.ts"
+  entities: [User],
   migrations: [CreateUsersTable1721751102172],
   subscribers: [],
 });
