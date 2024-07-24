@@ -18,7 +18,13 @@ const register = async (req: Request, res: Response) => {
     });
     await userRepository.save(newUser);
 
-    return res.status(201).json({ message: "Usuário criado" });
+    const user = await userRepository.findOneBy({ email });
+    if (user) {
+      const token = jwt.sign({ id: user.id }, "secretkey", { expiresIn: "1h" });
+      return res
+        .status(201)
+        .json({ message: "Usuário cadastrado com sucesso!", token });
+    }
   } catch (error) {
     return res.status(500).json({ message: "Erro ao criar usuário", error });
   }
@@ -42,7 +48,9 @@ const login = async (req: Request, res: Response) => {
 
     const token = jwt.sign({ id: user.id }, "secretkey", { expiresIn: "1h" });
 
-    return res.status(200).json({ token });
+    return res
+      .status(200)
+      .json({ token, message: "Login realizado com Sucesso!" });
   } catch (error) {
     return res.status(500).json({ message: "Erro ao logar.", error });
   }

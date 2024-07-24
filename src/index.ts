@@ -5,9 +5,9 @@ import routers from "./app/routes/routes.js";
 import cors from "cors";
 
 const server = express();
+server.use(cors());
 server.use(express.json());
 server.use(routers);
-server.use(cors());
 const PORT = 3001;
 
 AppDataSource.initialize()
