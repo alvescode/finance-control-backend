@@ -4,8 +4,7 @@ import { expenseRepository } from "../repositories/ExpenseRepository.js";
 import jwt from "jsonwebtoken";
 
 const registerExpense = async (req: Request, res: Response) => {
-  console.log("chegou aqui", req.body);
-  const { description, amount, category } = req.body;
+  const { description, value, category, isIncome } = req.body;
   const token = req.headers.authorization?.split(" ")[1];
 
   if (!token) {
@@ -20,9 +19,10 @@ const registerExpense = async (req: Request, res: Response) => {
 
     const expense = new Expense();
     expense.description = description;
-    expense.value = parseFloat(amount);
+    expense.value = parseFloat(value);
     expense.category = category;
     expense.userId = userId;
+    expense.isIncome = isIncome == "Despesa" ? false : true;
 
     await expenseRepository.save(expense);
 
@@ -40,4 +40,98 @@ const registerExpense = async (req: Request, res: Response) => {
   }
 };
 
-export default registerExpense;
+const removeExpense = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const { id } = req.params;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token não fornecido." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "secretkey") as { id: number };
+    const userId = decoded.id;
+
+    const expense = await expenseRepository.findOne({
+      where: {
+        id: parseInt(id),
+        userId: userId,
+      },
+    });
+
+    if (!expense) {
+      return res.status(404).json({ message: "Despesa não encontrada." });
+    }
+
+    await expenseRepository.delete(id);
+
+    return res.status(200).json({ message: "Despesa removida com sucesso." });
+  } catch (error) {
+    console.error("Erro ao remover despesa:", error);
+    return res.status(500).json({ message: "Erro ao remover despesa." });
+  }
+};
+const getExpense = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(" ")[1];
+
+  if (!token) {
+    return res.status(401).json({ message: "Token não fornecido." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "secretkey") as { id: number };
+    const userId = decoded.id;
+
+    const expenses = await expenseRepository.find({
+      where: {
+        userId: userId,
+      },
+    });
+
+    return res.status(200).json(expenses);
+  } catch (error) {
+    console.error("Erro ao buscar despesas:", error);
+    return res.status(500).json({ message: "Erro ao buscar despesas." });
+  }
+};
+
+const updateExpense = async (req: Request, res: Response) => {
+  const token = req.headers.authorization?.split(" ")[1];
+  const { expenseId } = req.params;
+
+  const { description, value, category, isIncome } = req.body;
+
+  if (!token) {
+    return res.status(401).json({ message: "Token não fornecido." });
+  }
+
+  try {
+    const decoded = jwt.verify(token, "secretkey") as { id: number };
+    const userId = decoded.id;
+
+    const expense = await expenseRepository.findOne({
+      where: {
+        id: parseInt(expenseId),
+        userId: userId,
+      },
+    });
+
+    if (!expense) {
+      return res.status(404).json({ message: "Despesa não encontrada." });
+    }
+
+    expense.description = description ?? expense.description;
+    expense.value = value ?? expense.value;
+    expense.category = category ?? expense.category;
+    expense.isIncome = isIncome ?? expense.isIncome;
+
+    await expenseRepository.save(expense);
+
+    return res.status(200).json(expense);
+  } catch (error) {
+    console.error("Erro ao atualizar despesa:", error);
+    return res.status(500).json({ message: "Erro ao atualizar despesa." });
+  }
+};
+
+export { registerExpense, removeExpense, updateExpense, getExpense };

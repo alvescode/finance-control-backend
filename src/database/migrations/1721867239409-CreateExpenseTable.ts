@@ -44,6 +44,12 @@ export class CreateExpenseTable1721841928969 implements MigrationInterface {
               length: "30",
               isNullable: false,
             },
+            {
+              name: "isIncome",
+              type: "boolean",
+              isNullable: false,
+              default: false,
+            },
           ],
         }),
       );

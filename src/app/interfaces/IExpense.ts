@@ -4,4 +4,5 @@ export interface IExampleEntity {
   description: string;
   value: number;
   category: string;
+  isIncome: boolean;
 }

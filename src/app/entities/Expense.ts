@@ -17,5 +17,8 @@ class Expense {
 
   @Column("varchar", { length: 30 })
   category!: string;
+
+  @Column("varchar")
+  isIncome!: boolean;
 }
 export default Expense;
