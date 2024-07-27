@@ -2,10 +2,10 @@ services:
   database:
     image: mysql:9.0.0
     environment:
-      MYSQL_ROOT_PASSWORD: local_password
-      MYSQL_DATABASE: local_database
-      MYSQL_USER: user
-      MYSQL_PASSWORD: local_password
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_USER: ${MYSQL_USER}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD}
     ports:
       - "3306:3306"
   phpmyadmin:
@@ -14,7 +14,7 @@ services:
     ports:
       - "8080:80"
     environment:
-      PMA_HOST: database
-      PMA_PORT: 3306
+      PMA_HOST: ${PMA_HOST}
+      PMA_PORT: ${PMA_PORT}
     depends_on:
       - database
