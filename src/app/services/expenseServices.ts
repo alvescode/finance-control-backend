@@ -66,6 +66,7 @@ const getExpense = async (req: Request, res: Response) => {
         userId: userId,
       },
     });
+    console.log(expenses[0].id);
     return res.status(200).json(expenses);
   } catch (error) {
     console.error("Erro ao buscar despesas:", error);
@@ -75,9 +76,9 @@ const getExpense = async (req: Request, res: Response) => {
 
 const updateExpense = async (req: Request, res: Response) => {
   const userId = (req as any).user.id;
-
+  console.log(req.params);
   const { expenseId } = req.params;
-
+  console.log("expenseId:", expenseId, "type:", typeof expenseId);
   const { description, value, category, isIncome } = req.body;
 
   try {
