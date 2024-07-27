@@ -32,6 +32,14 @@ export class CreateUsersTable1721751102172 implements MigrationInterface {
               length: "100",
               isNullable: false,
             },
+            {
+              name: "balance",
+              type: "decimal",
+              precision: 10,
+              scale: 2,
+              isNullable: false,
+              default: 0,
+            },
           ],
         }),
       );

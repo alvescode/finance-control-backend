@@ -13,5 +13,8 @@ class User {
 
   @Column("varchar", { length: 100 })
   password!: string;
+
+  @Column("decimal", { precision: 10, scale: 2, default: 0 })
+  balance!: number;
 }
 export default User;

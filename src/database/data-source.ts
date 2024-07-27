@@ -2,8 +2,9 @@ import { DataSource } from "typeorm";
 import "reflect-metadata";
 import User from "../app/entities/User.js";
 import Expense from "../app/entities/Expense.js";
-import { CreateUsersTable1721751102172 } from "./migrations/1721867235075-CreateUsersTable.js";
-import { CreateExpenseTable1721841928969 } from "./migrations/1721867239409-CreateExpenseTable.js";
+import { CreateExpenseTable1721841928969 } from "./migrations/1722051641498-CreateExpenseTable.js";
+import { CreateUsersTable1721751102172 } from "./migrations/1722051617149-CreateUsersTable.js";
+
 export const AppDataSource = new DataSource({
   type: "mysql",
   host: "localhost",

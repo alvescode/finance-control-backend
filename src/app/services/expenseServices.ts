@@ -5,17 +5,10 @@ import jwt from "jsonwebtoken";
 
 const registerExpense = async (req: Request, res: Response) => {
   const { description, value, category, isIncome } = req.body;
-  const token = req.headers.authorization?.split(" ")[1];
-  if (!token) {
-    return res.status(401).json({ message: "Token não fornecido." });
-  }
+  const userId = (req as any).user.id;
 
+  console.log(isIncome);
   try {
-    const decoded = jwt.verify(token, "secretkey") as { id: number };
-    const userId = decoded.id;
-
-    console.log("Token decodificado:", decoded);
-
     const expense = new Expense();
     expense.description = description;
     expense.value = parseFloat(value);
@@ -40,17 +33,9 @@ const registerExpense = async (req: Request, res: Response) => {
 };
 
 const removeExpense = async (req: Request, res: Response) => {
-  const token = req.headers.authorization?.split(" ")[1];
   const { id } = req.params;
-
-  if (!token) {
-    return res.status(401).json({ message: "Token não fornecido." });
-  }
-
+  const userId = (req as any).user.id;
   try {
-    const decoded = jwt.verify(token, "secretkey") as { id: number };
-    const userId = decoded.id;
-
     const expense = await expenseRepository.findOne({
       where: {
         id: parseInt(id),
@@ -62,6 +47,8 @@ const removeExpense = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "Despesa não encontrada." });
     }
 
+    //remover do saldo atual
+
     await expenseRepository.delete(id);
 
     return res.status(200).json({ message: "Despesa removida com sucesso." });
@@ -71,16 +58,9 @@ const removeExpense = async (req: Request, res: Response) => {
   }
 };
 const getExpense = async (req: Request, res: Response) => {
-  const token = req.headers.authorization?.split(" ")[1];
-
-  if (!token) {
-    return res.status(401).json({ message: "Token não fornecido." });
-  }
+  const userId = (req as any).user.id;
 
   try {
-    const decoded = jwt.verify(token, "secretkey") as { id: number };
-    const userId = decoded.id;
-
     const expenses = await expenseRepository.find({
       where: {
         userId: userId,
@@ -94,19 +74,13 @@ const getExpense = async (req: Request, res: Response) => {
 };
 
 const updateExpense = async (req: Request, res: Response) => {
-  const token = req.headers.authorization?.split(" ")[1];
+  const userId = (req as any).user.id;
+
   const { expenseId } = req.params;
 
   const { description, value, category, isIncome } = req.body;
 
-  if (!token) {
-    return res.status(401).json({ message: "Token não fornecido." });
-  }
-
   try {
-    const decoded = jwt.verify(token, "secretkey") as { id: number };
-    const userId = decoded.id;
-
     const expense = await expenseRepository.findOne({
       where: {
         id: parseInt(expenseId),
