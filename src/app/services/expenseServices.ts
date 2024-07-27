@@ -6,7 +6,6 @@ import jwt from "jsonwebtoken";
 const registerExpense = async (req: Request, res: Response) => {
   const { description, value, category, isIncome } = req.body;
   const token = req.headers.authorization?.split(" ")[1];
-
   if (!token) {
     return res.status(401).json({ message: "Token não fornecido." });
   }
@@ -22,7 +21,7 @@ const registerExpense = async (req: Request, res: Response) => {
     expense.value = parseFloat(value);
     expense.category = category;
     expense.userId = userId;
-    expense.isIncome = isIncome == "Despesa" ? false : true;
+    expense.isIncome = isIncome;
 
     await expenseRepository.save(expense);
 
@@ -87,7 +86,6 @@ const getExpense = async (req: Request, res: Response) => {
         userId: userId,
       },
     });
-
     return res.status(200).json(expenses);
   } catch (error) {
     console.error("Erro ao buscar despesas:", error);
@@ -119,7 +117,6 @@ const updateExpense = async (req: Request, res: Response) => {
     if (!expense) {
       return res.status(404).json({ message: "Despesa não encontrada." });
     }
-
     expense.description = description ?? expense.description;
     expense.value = value ?? expense.value;
     expense.category = category ?? expense.category;

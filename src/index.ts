@@ -15,8 +15,6 @@ if (result.error) {
   throw result.error;
 }
 
-console.log(result.parsed);
-
 AppDataSource.initialize()
   .then(() => {
     console.log("Data Source inicializado!");
